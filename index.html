@@ -6,371 +6,632 @@
 <title>Taaha's Arcade</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0f1226;
-    --card: #1a1f3d;
+    --bg: #0b0d1a;
     --text: #f3f4ff;
-    --muted: #a9aed6;
+    --muted: #a3a8cc;
+    --card: #161a33;
+    --brand-1: #ffb347;
+    --brand-2: #ff5e8a;
+    --brand-3: #8a7dff;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
   body {
     font-family: 'Fredoka', system-ui, sans-serif;
+    background: var(--bg);
     color: var(--text);
     min-height: 100vh;
-    background:
-      radial-gradient(circle at 15% 0%, #2a2f6b 0, transparent 45%),
-      radial-gradient(circle at 90% 15%, #4a1f5c 0, transparent 40%),
-      var(--bg);
+    overflow-x: hidden;
   }
-  header { text-align: center; padding: 56px 16px 28px; }
-  h1 { font-size: clamp(2.3rem, 7vw, 3.8rem); font-weight: 700; line-height: 1.1; }
-  h1 span {
-    background: linear-gradient(90deg, #ffb347, #ff5e8a, #8a7dff);
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-  }
-  header p { color: var(--muted); margin-top: 10px; font-size: 1.15rem; }
+  a { color: inherit; }
 
-  main {
-    max-width: 1180px; margin: 0 auto; padding: 12px 16px 56px;
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 24px;
+  /* ---------- Top bar ---------- */
+  .topbar {
+    position: fixed; inset: 0 0 auto 0; z-index: 20;
+    display: flex; align-items: center; gap: 28px;
+    padding: 14px clamp(16px, 4vw, 48px);
+    background: linear-gradient(180deg, rgba(11,13,26,.9), rgba(11,13,26,0));
+    transition: background .3s ease;
   }
+  .topbar.solid { background: rgba(11,13,26,.96); box-shadow: 0 2px 16px rgba(0,0,0,.4); }
+  .logo {
+    font-weight: 700; font-size: clamp(1.25rem, 3.5vw, 1.7rem); letter-spacing: .5px;
+    text-decoration: none;
+    background: linear-gradient(90deg, var(--brand-1), var(--brand-2), var(--brand-3));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    white-space: nowrap;
+  }
+  .topbar nav { display: flex; gap: 20px; }
+  .topbar nav a { text-decoration: none; color: #d6d9f2; font-size: .98rem; transition: color .2s; white-space: nowrap; }
+  .topbar nav a:hover { color: #fff; }
+  @media (max-width: 520px) { .topbar { gap: 16px; } .topbar nav { gap: 14px; } .topbar nav a { font-size: .9rem; } }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    height: clamp(420px, 62vw, 600px);
+    overflow: hidden;
+  }
+  .hero > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hero::after {
+    content: ""; position: absolute; inset: 0;
+    background:
+      linear-gradient(90deg, rgba(11,13,26,.95) 0%, rgba(11,13,26,.7) 35%, rgba(11,13,26,0) 70%),
+      linear-gradient(0deg, var(--bg) 0%, rgba(11,13,26,0) 35%);
+  }
+  .hero-content {
+    position: absolute; z-index: 2;
+    left: clamp(16px, 4vw, 48px); bottom: clamp(48px, 9vw, 110px);
+    max-width: min(480px, calc(100% - 32px));
+  }
+  @media (max-width: 600px) {
+    .hero { height: 600px; }
+    .hero::after {
+      background: linear-gradient(0deg, var(--bg) 0%, rgba(11,13,26,.9) 35%, rgba(11,13,26,0) 56%);
+    }
+    .hero-content { bottom: 48px; }
+  }
+  .badge {
+    display: inline-block; font-size: .78rem; font-weight: 700; letter-spacing: 1.5px;
+    background: var(--brand-2); color: #fff; padding: 4px 10px; border-radius: 6px;
+  }
+  .hero h1 { font-size: clamp(2.4rem, 7vw, 4.4rem); line-height: 1; margin: 12px 0 12px; text-shadow: 0 4px 18px rgba(0,0,0,.6); }
+  .hero p { font-size: clamp(1rem, 2.2vw, 1.2rem); color: #e2e4f6; text-shadow: 0 2px 8px rgba(0,0,0,.7); }
+  .hero-actions { display: flex; gap: 12px; margin-top: 22px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 11px 26px; border-radius: 8px; font-weight: 600; font-size: 1.08rem;
+    text-decoration: none; transition: transform .15s ease, background .2s ease;
+  }
+  .btn:hover { transform: scale(1.04); }
+  .btn-primary { background: #fff; color: #111; }
+  .btn-primary:hover { background: #e8e8e8; }
+  .btn-secondary { background: rgba(120,125,160,.45); color: #fff; backdrop-filter: blur(4px); }
+  .btn-secondary:hover { background: rgba(120,125,160,.65); }
+
+  /* ---------- Rows ---------- */
+  main { position: relative; z-index: 3; margin-top: -40px; padding-bottom: 40px; }
+  section.row { padding: 18px 0 22px; scroll-margin-top: 70px; }
+  .row-head { padding: 0 clamp(16px, 4vw, 48px); margin-bottom: 12px; }
+  .row-head h2 { font-size: clamp(1.35rem, 3vw, 1.75rem); font-weight: 600; }
+  .row-head p { color: var(--muted); font-size: .98rem; margin-top: 2px; }
+
+  .row-wrap { position: relative; }
+  .track {
+    display: flex; gap: 16px;
+    overflow-x: auto; overflow-y: visible;
+    scroll-snap-type: x mandatory; scroll-behavior: smooth;
+    padding: 14px clamp(16px, 4vw, 48px) 18px;
+    scroll-padding-left: clamp(16px, 4vw, 48px);
+    scrollbar-width: none;
+  }
+  .track::-webkit-scrollbar { display: none; }
+
+  .arrow {
+    position: absolute; top: 14px; bottom: 18px; z-index: 5;
+    width: clamp(36px, 4vw, 48px);
+    border: 0; cursor: pointer; color: #fff; font-size: 2rem; font-family: inherit;
+    background: rgba(11,13,26,.6);
+    opacity: 0; transition: opacity .2s ease, background .2s ease;
+  }
+  .arrow.left { left: 0; border-radius: 0 8px 8px 0; }
+  .arrow.right { right: 0; border-radius: 8px 0 0 8px; }
+  .row-wrap:hover .arrow:not([hidden]) { opacity: 1; }
+  .arrow:hover { background: rgba(11,13,26,.85); }
+  .arrow:focus-visible { opacity: 1; outline: 2px solid #fff; }
+  @media (hover: none) { .arrow { display: none; } }
+
+  /* ---------- Cards ---------- */
   .card {
-    display: flex; flex-direction: column;
-    background: var(--card); border-radius: 20px; overflow: hidden;
-    text-decoration: none; color: inherit;
-    border: 2px solid rgba(255,255,255,.06);
-    box-shadow: 0 8px 24px rgba(0,0,0,.35);
-    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    flex: 0 0 clamp(250px, 27vw, 330px);
+    scroll-snap-align: start;
+    text-decoration: none;
+    border-radius: 12px; overflow: hidden;
+    background: var(--card);
+    box-shadow: 0 6px 18px rgba(0,0,0,.4);
+    outline: 2px solid transparent; outline-offset: 0;
+    transition: transform .25s ease, box-shadow .25s ease, outline-color .25s ease;
   }
   .card:hover, .card:focus-visible {
-    transform: translateY(-6px) scale(1.015);
-    border-color: var(--accent);
-    box-shadow: 0 16px 36px rgba(0,0,0,.5), 0 0 22px color-mix(in srgb, var(--accent) 45%, transparent);
-    outline: none;
+    transform: scale(1.05);
+    outline-color: var(--accent);
+    box-shadow: 0 14px 32px rgba(0,0,0,.6), 0 0 22px color-mix(in srgb, var(--accent) 40%, transparent);
+    z-index: 2; position: relative;
   }
-  .art svg { display: block; width: 100%; height: auto; }
-  .info { padding: 16px 18px 20px; display: flex; flex-direction: column; gap: 6px; flex: 1; }
-  .info h2 { font-size: 1.55rem; font-weight: 700; }
-  .info p { color: var(--muted); flex: 1; }
-  .play {
-    align-self: flex-start; margin-top: 10px;
-    background: var(--accent); color: #141414; font-weight: 700;
-    padding: 8px 20px; border-radius: 999px; transition: transform .2s ease;
+  .thumb { position: relative; aspect-ratio: 16 / 9; }
+  .thumb svg { display: block; width: 100%; height: 100%; }
+  .thumb::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(0deg, rgba(0,0,0,.78) 0%, rgba(0,0,0,0) 48%);
   }
-  .card:hover .play, .card:focus-visible .play { transform: translateX(4px); }
-  footer { text-align: center; color: var(--muted); padding: 0 16px 36px; font-size: .95rem; }
-  @media (prefers-reduced-motion: reduce) { .card, .play { transition: none; } }
+  .thumb h3 {
+    position: absolute; left: 14px; bottom: 10px; z-index: 2;
+    font-size: 1.45rem; font-weight: 700; text-shadow: 0 2px 8px rgba(0,0,0,.8);
+  }
+  .thumb .badge { position: absolute; top: 10px; left: 10px; z-index: 2; font-size: .7rem; }
+  .play-circle {
+    position: absolute; z-index: 2; right: 12px; bottom: 10px;
+    width: 40px; height: 40px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: #fff; color: #111; font-size: 1rem; padding-left: 3px;
+    opacity: 0; transform: scale(.7); transition: opacity .2s ease, transform .2s ease;
+  }
+  .card:hover .play-circle, .card:focus-visible .play-circle { opacity: 1; transform: scale(1); }
+  @media (hover: none) { .play-circle { opacity: 1; transform: scale(1); } }
+  .card-info { padding: 11px 14px 14px; color: var(--muted); font-size: .95rem; line-height: 1.35; }
+  .card-info .tag { color: var(--accent); font-weight: 600; font-size: .82rem; letter-spacing: .4px; text-transform: uppercase; display: block; margin-bottom: 3px; }
+
+  footer { text-align: center; color: var(--muted); padding: 10px 16px 40px; font-size: .95rem; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html, .track { scroll-behavior: auto; }
+    .card, .btn, .play-circle, .arrow { transition: none; }
+  }
 </style>
 </head>
 <body>
 
-<header>
-  <h1><span>Taaha's Arcade</span></h1>
-  <p>Pick a game and press play</p>
+<!-- ================= ART SPRITES (each game's banner, drawn once) ================= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <!-- shared gradients -->
+    <linearGradient id="emSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2b0d22"/><stop offset=".65" stop-color="#a8321c"/><stop offset="1" stop-color="#ff7a2f"/>
+    </linearGradient>
+    <radialGradient id="emGlow">
+      <stop offset="0" stop-color="#ffd27a" stop-opacity=".85"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="mfSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2d1b4e"/><stop offset="1" stop-color="#6fcf7f"/>
+    </linearGradient>
+    <linearGradient id="frSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ff8a5a"/><stop offset="1" stop-color="#ffe0a3"/>
+    </linearGradient>
+    <linearGradient id="frSea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1f6f9c"/><stop offset="1" stop-color="#0a2a44"/>
+    </linearGradient>
+    <linearGradient id="ddCave" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#120e24"/><stop offset="1" stop-color="#2a1f45"/>
+    </linearGradient>
+    <linearGradient id="ddBeam" x1="1" y1="0" x2="0" y2="0">
+      <stop offset="0" stop-color="#fff3b0" stop-opacity=".45"/><stop offset="1" stop-color="#fff3b0" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="ddGlowCyan"><stop offset="0" stop-color="#4de8e0" stop-opacity=".55"/><stop offset="1" stop-color="#4de8e0" stop-opacity="0"/></radialGradient>
+    <radialGradient id="ddGlowPink"><stop offset="0" stop-color="#ff5ea8" stop-opacity=".5"/><stop offset="1" stop-color="#ff5ea8" stop-opacity="0"/></radialGradient>
+    <radialGradient id="ddGlowGold"><stop offset="0" stop-color="#ffcc33" stop-opacity=".5"/><stop offset="1" stop-color="#ffcc33" stop-opacity="0"/></radialGradient>
+    <pattern id="ldGrid" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="translate(85 15)">
+      <rect width="10" height="10" fill="none" stroke="#9aa3ad" stroke-width=".8"/>
+    </pattern>
+    <pattern id="bsGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+      <rect width="20" height="20" fill="none" stroke="#ffffff" stroke-opacity=".14" stroke-width="1"/>
+    </pattern>
+    <polygon id="bsBoom" points="228,108 217.4,111.1 222.7,120.7 213.1,115.4 210,126 206.9,115.4 197.3,120.7 202.6,111.1 192,108 202.6,104.9 197.3,95.3 206.9,100.6 210,90 213.1,100.6 222.7,95.3 217.4,104.9"/>
+    <g id="sdGrid">
+      <rect width="90" height="90" rx="6" fill="#fff" stroke="#111" stroke-width="3"/>
+      <path d="M30 0 V90 M60 0 V90 M0 30 H90 M0 60 H90" stroke="#111" stroke-width="1.5"/>
+    </g>
+    <polygon id="ddGem" points="0,-9 7,-2 4,8 -4,8 -7,-2"/>
+  </defs>
+
+  <!-- DWARVEN DREAM -->
+  <symbol id="art-dwarven" viewBox="0 0 320 180">
+    <rect width="320" height="180" fill="url(#ddCave)"/>
+    <!-- rock walls -->
+    <path d="M0 0 H320 V22 L290 34 L250 18 L205 30 L160 14 L120 32 L75 16 L35 30 L0 20Z" fill="#3a2d57"/>
+    <path d="M0 150 L40 140 L90 148 L140 138 L200 146 L250 136 L320 144 V180 H0Z" fill="#3a2d57"/>
+    <path d="M0 162 L60 156 L130 162 L200 154 L270 160 L320 156 V180 H0Z" fill="#2a2042"/>
+    <path d="M0 40 L22 52 L14 90 L26 120 L0 140Z" fill="#33274d"/>
+    <!-- ore vein lines -->
+    <path d="M30 70 Q70 60 95 80 T150 76" stroke="#4de8e0" stroke-width="2" fill="none" opacity=".35"/>
+    <path d="M60 120 Q100 110 130 126" stroke="#ffcc33" stroke-width="2" fill="none" opacity=".35"/>
+    <!-- glowing ore clusters -->
+    <circle cx="70" cy="66" r="26" fill="url(#ddGlowCyan)"/>
+    <g fill="#4de8e0" stroke="#bffaf6" stroke-width="1">
+      <use href="#ddGem" transform="translate(62 66) rotate(-15)"/>
+      <use href="#ddGem" transform="translate(78 60) scale(.8) rotate(12)"/>
+      <use href="#ddGem" transform="translate(74 76) scale(.6)"/>
+    </g>
+    <circle cx="112" cy="122" r="24" fill="url(#ddGlowGold)"/>
+    <g fill="#ffcc33" stroke="#fff1b0" stroke-width="1">
+      <use href="#ddGem" transform="translate(106 124) scale(.9) rotate(20)"/>
+      <use href="#ddGem" transform="translate(120 118) scale(.7) rotate(-10)"/>
+    </g>
+    <circle cx="160" cy="44" r="22" fill="url(#ddGlowPink)"/>
+    <g fill="#ff5ea8" stroke="#ffc6e0" stroke-width="1">
+      <use href="#ddGem" transform="translate(156 46) scale(.8) rotate(180)"/>
+      <use href="#ddGem" transform="translate(168 42) scale(.6) rotate(170)"/>
+    </g>
+    <!-- big crystal spire -->
+    <g>
+      <polygon points="150,150 160,104 170,150" fill="#8a6cff"/>
+      <polygon points="160,104 170,150 160,150" fill="#6a4ee0"/>
+      <polygon points="136,150 142,124 150,150" fill="#a58cff"/>
+      <polygon points="168,150 178,128 184,150" fill="#a58cff"/>
+    </g>
+    <!-- headlamp beam -->
+    <polygon points="226,64 110,30 110,112" fill="url(#ddBeam)"/>
+    <!-- pickaxe -->
+    <line x1="268" y1="152" x2="294" y2="90" stroke="#7a4a24" stroke-width="5" stroke-linecap="round"/>
+    <path d="M272 86 Q294 74 316 92 Q296 84 274 94 Z" fill="#b8c4d0" stroke="#5f6b78" stroke-width="1.5"/>
+    <!-- dwarf body -->
+    <path d="M214 160 Q214 116 240 112 Q266 116 266 160 Z" fill="#3b6fb6"/>
+    <rect x="216" y="138" width="48" height="7" fill="#5a3416"/>
+    <rect x="235" y="137" width="10" height="9" rx="1" fill="#f2b632"/>
+    <!-- arm holding pickaxe -->
+    <path d="M258 128 Q276 126 282 116" stroke="#3b6fb6" stroke-width="10" stroke-linecap="round" fill="none"/>
+    <circle cx="283" cy="115" r="6" fill="#f2c29b"/>
+    <!-- head -->
+    <circle cx="240" cy="82" r="18" fill="#f2c29b"/>
+    <!-- beard -->
+    <path d="M221 84 Q222 100 230 116 Q240 140 250 116 Q258 100 259 84 Q252 96 240 96 Q228 96 221 84 Z" fill="#e07b39"/>
+    <path d="M228 93 Q240 86 252 93 Q246 99 240 96 Q234 99 228 93 Z" fill="#c4612a"/>
+    <!-- face -->
+    <circle cx="233" cy="80" r="2.6" fill="#1b1b2f"/>
+    <circle cx="247" cy="80" r="2.6" fill="#1b1b2f"/>
+    <circle cx="240" cy="87" r="4.5" fill="#e3a07a"/>
+    <!-- helmet -->
+    <path d="M218 74 Q218 50 240 50 Q262 50 262 74 Z" fill="#9aa4b1"/>
+    <rect x="214" y="71" width="52" height="6" rx="3" fill="#7b8592"/>
+    <rect x="221" y="58" width="10" height="10" rx="2" fill="#5f6b78"/>
+    <circle cx="226" cy="63" r="4" fill="#fff3b0"/>
+    <!-- sparkles -->
+    <g fill="#fff" opacity=".8">
+      <circle cx="44" cy="104" r="1.4"/><circle cx="196" cy="70" r="1.2"/><circle cx="130" cy="58" r="1.4"/>
+      <circle cx="300" cy="50" r="1.2"/><circle cx="92" cy="40" r="1"/><circle cx="186" cy="118" r="1.2"/>
+    </g>
+  </symbol>
+
+  <!-- EMBERHOLD -->
+  <symbol id="art-emberhold" viewBox="0 0 320 180">
+    <rect width="320" height="180" fill="url(#emSky)"/>
+    <circle cx="160" cy="92" r="82" fill="url(#emGlow)"/>
+    <path d="M0 135 L45 100 L80 125 L125 85 L160 118 L200 82 L245 120 L280 95 L320 125 V180 H0Z" fill="#4a1426"/>
+    <g fill="#240a14">
+      <rect x="20" y="104" width="40" height="40"/>
+      <rect x="16" y="96" width="14" height="48"/><polygon points="14,97 23,82 32,97"/>
+      <rect x="50" y="96" width="14" height="48"/><polygon points="48,97 57,82 66,97"/>
+      <path d="M0 155 L60 136 L120 150 L190 132 L250 150 L320 138 V180 H0Z"/>
+    </g>
+    <polygon points="152,54 168,54 168,140 160,156 152,140" fill="#e9eef6"/>
+    <polygon points="160,54 168,54 168,140 160,156" fill="#c4cedb"/>
+    <rect x="132" y="46" width="56" height="9" rx="4" fill="#f2b632"/>
+    <rect x="155" y="24" width="10" height="23" rx="3" fill="#6b3a1f"/>
+    <circle cx="160" cy="21" r="7" fill="#f2b632"/>
+    <circle cx="160" cy="50.5" r="3.5" fill="#d63a2f"/>
+    <g fill="#ffcc66">
+      <circle cx="70" cy="60" r="2"/><circle cx="95" cy="38" r="1.5"/><circle cx="232" cy="50" r="2.5"/>
+      <circle cx="256" cy="28" r="1.5"/><circle cx="206" cy="72" r="1.8"/><circle cx="118" cy="28" r="1.6"/>
+      <circle cx="282" cy="64" r="2"/><circle cx="42" cy="44" r="1.6"/>
+    </g>
+  </symbol>
+
+  <!-- MUTANT FARM -->
+  <symbol id="art-mutant" viewBox="0 0 320 180">
+    <rect width="320" height="180" fill="url(#mfSky)"/>
+    <circle cx="58" cy="44" r="32" fill="#c6ff4d" opacity=".22"/>
+    <circle cx="58" cy="44" r="21" fill="#c6ff4d"/>
+    <path d="M0 120 Q80 95 160 115 T320 105 V180 H0Z" fill="#3e9a4a"/>
+    <rect x="236" y="95" width="56" height="45" fill="#c0392b"/>
+    <polygon points="230,98 264,72 298,98" fill="#7d1c14"/>
+    <rect x="254" y="113" width="20" height="27" fill="#f5e6c8"/>
+    <path d="M254 113 L274 140 M274 113 L254 140" stroke="#c0392b" stroke-width="2.5"/>
+    <path d="M0 140 Q160 125 320 140 V180 H0Z" fill="#2f7a39"/>
+    <path d="M0 155 Q160 142 320 155 M0 168 Q160 158 320 168" stroke="#22602b" stroke-width="3" fill="none"/>
+    <circle cx="160" cy="112" r="48" fill="#c6ff4d" opacity=".14"/>
+    <path d="M152 86 Q138 62 148 52 Q158 70 158 84 Z" fill="#4cd964"/>
+    <path d="M159 84 Q158 50 170 44 Q173 66 166 86 Z" fill="#3ec257"/>
+    <path d="M167 88 Q186 62 197 66 Q187 81 174 92 Z" fill="#4cd964"/>
+    <path d="M137 92 Q160 79 183 92 L164 160 Q160 168 156 160 Z" fill="#ff8c1a"/>
+    <path d="M151 147 L158 147 M165 139 L172 139 M147 122 L152 122" stroke="#d96e00" stroke-width="2.5" stroke-linecap="round"/>
+    <circle cx="149" cy="104" r="7" fill="#fff"/><circle cx="151" cy="105" r="3.2" fill="#1b1b2f"/>
+    <circle cx="171" cy="102" r="9" fill="#fff"/><circle cx="169" cy="104" r="4" fill="#1b1b2f"/>
+    <circle cx="160" cy="120" r="4.5" fill="#fff"/><circle cx="161" cy="121" r="2" fill="#1b1b2f"/>
+    <path d="M148 131 Q160 141 173 129" stroke="#6b2d00" stroke-width="3" fill="none" stroke-linecap="round"/>
+  </symbol>
+
+  <!-- FISHING RISE -->
+  <symbol id="art-fishing" viewBox="0 0 320 180">
+    <rect width="320" height="100" fill="url(#frSky)"/>
+    <circle cx="160" cy="100" r="34" fill="#fff1b8"/>
+    <rect y="100" width="320" height="80" fill="url(#frSea)"/>
+    <g fill="#fff1b8" opacity=".55">
+      <rect x="135" y="107" width="50" height="3" rx="1.5"/><rect x="143" y="115" width="34" height="3" rx="1.5"/><rect x="150" y="123" width="20" height="3" rx="1.5"/>
+    </g>
+    <path d="M0 140 Q20 134 40 140 T80 140 T120 140 T160 140 T200 140 T240 140 T280 140 T320 140" stroke="#7fc6e8" stroke-width="2" fill="none" opacity=".5"/>
+    <path d="M0 160 Q20 154 40 160 T80 160 T120 160 T160 160 T200 160 T240 160 T280 160 T320 160" stroke="#7fc6e8" stroke-width="2" fill="none" opacity=".35"/>
+    <line x1="74" y1="97" x2="74" y2="58" stroke="#4a2a14" stroke-width="3"/>
+    <polygon points="77,61 77,92 102,92" fill="#f4ecd8"/>
+    <path d="M38 96 L110 96 L99 111 L49 111 Z" fill="#6b3d1f"/>
+    <line x1="100" y1="94" x2="128" y2="68" stroke="#3a2a1a" stroke-width="2"/>
+    <line x1="128" y1="68" x2="134" y2="122" stroke="#fff" stroke-width="1" opacity=".85"/>
+    <circle cx="134" cy="120" r="3.5" fill="#e63946"/>
+    <g fill="none" stroke-linecap="round">
+      <path d="M218 182 C214 162 230 152 224 136" stroke="#8e44ad" stroke-width="9"/>
+      <path d="M252 182 C240 150 276 140 268 112 C262 90 284 82 291 97" stroke="#8e44ad" stroke-width="14"/>
+      <path d="M252 182 C240 150 276 140 268 112 C262 90 284 82 291 97" stroke="#d6a6ea" stroke-width="4" stroke-dasharray="1 9"/>
+      <path d="M302 182 C307 152 286 140 297 121 C305 106 318 108 316 120" stroke="#9b59b6" stroke-width="10"/>
+      <path d="M302 182 C307 152 286 140 297 121 C305 106 318 108 316 120" stroke="#d6a6ea" stroke-width="3" stroke-dasharray="1 8"/>
+    </g>
+  </symbol>
+
+  <!-- LUDO -->
+  <symbol id="art-ludo" viewBox="0 0 320 180">
+    <rect width="320" height="180" fill="#2e7d5b"/>
+    <rect x="85" y="15" width="150" height="150" fill="#fff"/>
+    <rect x="155" y="25" width="10" height="50" fill="#43a047"/>
+    <rect x="95" y="85" width="50" height="10" fill="#e53935"/>
+    <rect x="175" y="85" width="50" height="10" fill="#fdd835"/>
+    <rect x="155" y="105" width="10" height="50" fill="#1e88e5"/>
+    <g fill="url(#ldGrid)">
+      <rect x="145" y="15" width="30" height="60"/><rect x="145" y="105" width="30" height="60"/>
+      <rect x="85" y="75" width="60" height="30"/><rect x="175" y="75" width="60" height="30"/>
+    </g>
+    <rect x="85" y="15" width="60" height="60" fill="#e53935"/>
+    <rect x="175" y="15" width="60" height="60" fill="#43a047"/>
+    <rect x="85" y="105" width="60" height="60" fill="#1e88e5"/>
+    <rect x="175" y="105" width="60" height="60" fill="#fdd835"/>
+    <g fill="#fff"><rect x="97" y="27" width="36" height="36" rx="4"/><rect x="187" y="27" width="36" height="36" rx="4"/><rect x="97" y="117" width="36" height="36" rx="4"/><rect x="187" y="117" width="36" height="36" rx="4"/></g>
+    <g stroke="#222" stroke-width="1.2">
+      <g fill="#e53935"><circle cx="106" cy="36" r="5"/><circle cx="124" cy="36" r="5"/><circle cx="106" cy="54" r="5"/><circle cx="124" cy="54" r="5"/></g>
+      <g fill="#43a047"><circle cx="196" cy="36" r="5"/><circle cx="214" cy="36" r="5"/><circle cx="196" cy="54" r="5"/><circle cx="214" cy="54" r="5"/></g>
+      <g fill="#1e88e5"><circle cx="106" cy="126" r="5"/><circle cx="124" cy="126" r="5"/><circle cx="106" cy="144" r="5"/><circle cx="124" cy="144" r="5"/></g>
+      <g fill="#fdd835"><circle cx="196" cy="126" r="5"/><circle cx="214" cy="126" r="5"/><circle cx="196" cy="144" r="5"/><circle cx="214" cy="144" r="5"/></g>
+    </g>
+    <polygon points="145,75 145,105 160,90" fill="#e53935"/>
+    <polygon points="145,75 175,75 160,90" fill="#43a047"/>
+    <polygon points="175,75 175,105 160,90" fill="#fdd835"/>
+    <polygon points="145,105 175,105 160,90" fill="#1e88e5"/>
+    <rect x="85" y="15" width="150" height="150" fill="none" stroke="#1b1b1b" stroke-width="2.5" rx="2"/>
+    <g fill="#fdd835" stroke="#8a6d00" stroke-width="2">
+      <path d="M33 140 Q45 98 57 140 Z"/><circle cx="45" cy="95" r="11"/><rect x="29" y="138" width="32" height="9" rx="3"/>
+    </g>
+    <g transform="translate(274 120) rotate(12)">
+      <rect x="-19" y="-19" width="38" height="38" rx="7" fill="#fff" stroke="#222" stroke-width="2"/>
+      <g fill="#222"><circle cx="-9" cy="-9" r="3.3"/><circle cx="9" cy="-9" r="3.3"/><circle cx="0" cy="0" r="3.3"/><circle cx="-9" cy="9" r="3.3"/><circle cx="9" cy="9" r="3.3"/></g>
+    </g>
+  </symbol>
+
+  <!-- BATTLESHIPS -->
+  <symbol id="art-battleships" viewBox="0 0 320 180">
+    <rect width="320" height="180" fill="#0f4677"/>
+    <rect width="320" height="180" fill="url(#bsGrid)"/>
+    <line x1="156" y1="64" x2="156" y2="44" stroke="#5f6b78" stroke-width="2.5"/>
+    <rect x="145" y="64" width="22" height="18" fill="#9aa7b4"/>
+    <rect x="128" y="80" width="54" height="28" fill="#8a98a6"/>
+    <rect x="188" y="86" width="14" height="22" fill="#6c7885"/>
+    <line x1="92" y1="102" x2="62" y2="96" stroke="#5f6b78" stroke-width="4" stroke-linecap="round"/>
+    <rect x="86" y="97" width="24" height="12" rx="4" fill="#8a98a6"/>
+    <line x1="222" y1="102" x2="252" y2="96" stroke="#5f6b78" stroke-width="4" stroke-linecap="round"/>
+    <rect x="208" y="97" width="24" height="12" rx="4" fill="#8a98a6"/>
+    <path d="M48 108 L272 108 L254 134 L66 134 Z" fill="#7d8b99"/>
+    <rect x="66" y="128" width="188" height="6" fill="#b23a3a"/>
+    <use href="#bsBoom" fill="#ff9f1c"/>
+    <use href="#bsBoom" fill="#ffe066" transform="translate(210 108) scale(.5) translate(-210 -108)"/>
+    <g fill="#e63946" stroke="#fff" stroke-width="1.5"><circle cx="170" cy="120" r="5"/><circle cx="130" cy="120" r="5"/></g>
+    <g fill="#fff" opacity=".9"><circle cx="30" cy="30" r="4.5"/><circle cx="270" cy="50" r="4.5"/><circle cx="250" cy="150" r="4.5"/><circle cx="50" cy="150" r="4.5"/><circle cx="190" cy="30" r="4.5"/></g>
+    <g stroke="#ff4d4d" stroke-width="2.5" fill="none">
+      <circle cx="90" cy="50" r="14"/>
+      <path d="M90 30 V42 M90 58 V70 M70 50 H82 M98 50 H110"/>
+    </g>
+  </symbol>
+
+  <!-- SUDOKU VS -->
+  <symbol id="art-sudoku" viewBox="0 0 320 180">
+    <rect width="320" height="180" fill="#2563eb"/>
+    <polygon points="178,0 320,0 320,180 142,180" fill="#dc2626"/>
+    <use href="#sdGrid" x="26" y="45"/>
+    <use href="#sdGrid" x="204" y="45"/>
+    <rect x="57" y="76" width="28" height="28" fill="#dbeafe"/>
+    <rect x="265" y="106" width="28" height="28" fill="#fee2e2"/>
+    <g font-family="Fredoka, system-ui, sans-serif" font-weight="700" font-size="20" text-anchor="middle">
+      <g fill="#1d4ed8">
+        <text x="41" y="67">5</text><text x="101" y="67">8</text><text x="71" y="97">3</text><text x="41" y="127">1</text><text x="101" y="127">9</text>
+      </g>
+      <g fill="#b91c1c">
+        <text x="249" y="67">7</text><text x="219" y="97">4</text><text x="279" y="97">2</text><text x="249" y="127">6</text>
+      </g>
+    </g>
+    <circle cx="160" cy="90" r="27" fill="#111" stroke="#fde047" stroke-width="4"/>
+    <text x="160" y="99" font-family="Fredoka, system-ui, sans-serif" font-weight="700" font-size="24" fill="#fde047" text-anchor="middle">VS</text>
+    <g fill="#fde047">
+      <polygon points="160,14 154,36 161,36 156,52 168,28 161,28 166,14"/>
+      <polygon points="160,166 166,144 159,144 164,128 152,152 159,152 154,166"/>
+    </g>
+  </symbol>
+
+  <!-- MONOPOLY -->
+  <symbol id="art-monopoly" viewBox="0 0 320 180">
+    <rect width="320" height="180" fill="#cfe8d5"/>
+    <rect x="0" y="0" width="40" height="16" fill="#8b4513"/><rect x="40" y="0" width="40" height="16" fill="#87ceeb"/>
+    <rect x="80" y="0" width="40" height="16" fill="#d63384"/><rect x="120" y="0" width="40" height="16" fill="#fd7e14"/>
+    <rect x="160" y="0" width="40" height="16" fill="#dc3545"/><rect x="200" y="0" width="40" height="16" fill="#ffc107"/>
+    <rect x="240" y="0" width="40" height="16" fill="#198754"/><rect x="280" y="0" width="40" height="16" fill="#0d47a1"/>
+    <path d="M40 0 V16 M80 0 V16 M120 0 V16 M160 0 V16 M200 0 V16 M240 0 V16 M280 0 V16 M0 16 H320" stroke="#1b1b1b" stroke-width="2"/>
+    <circle cx="270" cy="48" r="14" fill="#ffd54a" stroke="#c99700" stroke-width="3"/>
+    <text x="270" y="54" font-family="Fredoka, system-ui, sans-serif" font-weight="700" font-size="16" fill="#9a7300" text-anchor="middle">$</text>
+    <rect y="138" width="320" height="42" fill="#5b6770"/>
+    <g fill="#fff"><rect x="10" y="157" width="28" height="4" rx="2"/><rect x="70" y="157" width="28" height="4" rx="2"/><rect x="130" y="157" width="28" height="4" rx="2"/><rect x="190" y="157" width="28" height="4" rx="2"/><rect x="250" y="157" width="28" height="4" rx="2"/></g>
+    <g fill="#2e9e4f" stroke="#1d6b35" stroke-width="2" stroke-linejoin="round">
+      <polygon points="28,138 28,116 41,103 54,116 54,138"/>
+      <polygon points="62,138 62,116 75,103 88,116 88,138"/>
+      <polygon points="96,138 96,116 109,103 122,116 122,138"/>
+    </g>
+    <polygon points="126,92 158,70 190,92" fill="#a01818"/>
+    <rect x="130" y="90" width="56" height="48" fill="#d62828"/>
+    <g fill="#ffe8a3"><rect x="138" y="98" width="9" height="9"/><rect x="153.5" y="98" width="9" height="9"/><rect x="169" y="98" width="9" height="9"/><rect x="138" y="113" width="9" height="9"/><rect x="169" y="113" width="9" height="9"/></g>
+    <rect x="152" y="122" width="12" height="16" fill="#5a0d0d"/>
+    <g transform="translate(236 104) rotate(-12)">
+      <rect x="-17" y="-17" width="34" height="34" rx="6" fill="#fff" stroke="#222" stroke-width="2"/>
+      <g fill="#222"><circle cx="-8" cy="-8" r="3"/><circle cx="0" cy="0" r="3"/><circle cx="8" cy="8" r="3"/></g>
+    </g>
+    <g transform="translate(282 116) rotate(14)">
+      <rect x="-17" y="-17" width="34" height="34" rx="6" fill="#fff" stroke="#222" stroke-width="2"/>
+      <g fill="#222"><circle cx="-8" cy="-8" r="3"/><circle cx="-8" cy="0" r="3"/><circle cx="-8" cy="8" r="3"/><circle cx="8" cy="-8" r="3"/><circle cx="8" cy="0" r="3"/><circle cx="8" cy="8" r="3"/></g>
+    </g>
+  </symbol>
+</svg>
+
+<!-- ================= TOP BAR ================= -->
+<header class="topbar" id="topbar">
+  <a class="logo" href="#top">TAAHA'S ARCADE</a>
+  <nav>
+    <a href="#progression">Progression</a>
+    <a href="#vs">Vs Games</a>
+  </nav>
 </header>
+
+<!-- ================= FEATURED ================= -->
+<section class="hero" id="top">
+  <svg viewBox="0 0 320 180" preserveAspectRatio="xMaxYMid slice" role="img" aria-label="A dwarf miner with a headlamp and pickaxe in a crystal cave">
+    <use href="#art-dwarven"/>
+  </svg>
+  <div class="hero-content">
+    <span class="badge">NEW GAME</span>
+    <h1>Dwarven Dream</h1>
+    <p>Start poor, mine glowing ore veins and work your way down from the Dwarven Mines to the Crystal Mines.</p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="https://taaha-ilyas.github.io/dwarvendream/">▶ Play</a>
+      <a class="btn btn-secondary" href="#progression">More games</a>
+    </div>
+  </div>
+</section>
 
 <main>
 
-  <!-- EMBERHOLD -->
-  <a class="card" href="https://taaha-ilyas.github.io/emberhold/" style="--accent:#ff8a3d">
-    <div class="art">
-      <svg viewBox="0 0 320 180" role="img" aria-label="A glowing sword planted in a fiery landscape">
-        <defs>
-          <linearGradient id="emSky" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#2b0d22"/><stop offset=".65" stop-color="#a8321c"/><stop offset="1" stop-color="#ff7a2f"/>
-          </linearGradient>
-          <radialGradient id="emGlow">
-            <stop offset="0" stop-color="#ffd27a" stop-opacity=".85"/><stop offset="1" stop-color="#ffd27a" stop-opacity="0"/>
-          </radialGradient>
-        </defs>
-        <rect width="320" height="180" fill="url(#emSky)"/>
-        <circle cx="160" cy="92" r="82" fill="url(#emGlow)"/>
-        <path d="M0 135 L45 100 L80 125 L125 85 L160 118 L200 82 L245 120 L280 95 L320 125 V180 H0Z" fill="#4a1426"/>
-        <g fill="#240a14">
-          <rect x="20" y="104" width="40" height="40"/>
-          <rect x="16" y="96" width="14" height="48"/><polygon points="14,97 23,82 32,97"/>
-          <rect x="50" y="96" width="14" height="48"/><polygon points="48,97 57,82 66,97"/>
-          <path d="M0 155 L60 136 L120 150 L190 132 L250 150 L320 138 V180 H0Z"/>
-        </g>
-        <polygon points="152,54 168,54 168,140 160,156 152,140" fill="#e9eef6"/>
-        <polygon points="160,54 168,54 168,140 160,156" fill="#c4cedb"/>
-        <rect x="132" y="46" width="56" height="9" rx="4" fill="#f2b632"/>
-        <rect x="155" y="24" width="10" height="23" rx="3" fill="#6b3a1f"/>
-        <circle cx="160" cy="21" r="7" fill="#f2b632"/>
-        <circle cx="160" cy="50.5" r="3.5" fill="#d63a2f"/>
-        <g fill="#ffcc66">
-          <circle cx="70" cy="60" r="2"/><circle cx="95" cy="38" r="1.5"/><circle cx="232" cy="50" r="2.5"/>
-          <circle cx="256" cy="28" r="1.5"/><circle cx="206" cy="72" r="1.8"/><circle cx="118" cy="28" r="1.6"/>
-          <circle cx="282" cy="64" r="2"/><circle cx="42" cy="44" r="1.6"/>
-        </g>
-      </svg>
+  <!-- ================= PROGRESSION ================= -->
+  <section class="row" id="progression">
+    <div class="row-head">
+      <h2>Progression Games</h2>
+      <p>Start from nothing, level up and grind your way to the top</p>
     </div>
-    <div class="info">
-      <h2>Emberhold</h2>
-      <p>Train your hero, grab your sword and battle through the land.</p>
-      <span class="play">Play ▶</span>
-    </div>
-  </a>
+    <div class="row-wrap">
+      <button class="arrow left" aria-label="Scroll left" hidden>‹</button>
+      <div class="track">
 
-  <!-- MUTANT FARM -->
-  <a class="card" href="https://taaha-ilyas.github.io/MutantFarm/" style="--accent:#9be35a">
-    <div class="art">
-      <svg viewBox="0 0 320 180" role="img" aria-label="A three-eyed mutant carrot grinning on a farm">
-        <defs>
-          <linearGradient id="mfSky" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#2d1b4e"/><stop offset="1" stop-color="#6fcf7f"/>
-          </linearGradient>
-        </defs>
-        <rect width="320" height="180" fill="url(#mfSky)"/>
-        <circle cx="58" cy="44" r="32" fill="#c6ff4d" opacity=".22"/>
-        <circle cx="58" cy="44" r="21" fill="#c6ff4d"/>
-        <path d="M0 120 Q80 95 160 115 T320 105 V180 H0Z" fill="#3e9a4a"/>
-        <rect x="236" y="95" width="56" height="45" fill="#c0392b"/>
-        <polygon points="230,98 264,72 298,98" fill="#7d1c14"/>
-        <rect x="254" y="113" width="20" height="27" fill="#f5e6c8"/>
-        <path d="M254 113 L274 140 M274 113 L254 140" stroke="#c0392b" stroke-width="2.5"/>
-        <path d="M0 140 Q160 125 320 140 V180 H0Z" fill="#2f7a39"/>
-        <path d="M0 155 Q160 142 320 155 M0 168 Q160 158 320 168" stroke="#22602b" stroke-width="3" fill="none"/>
-        <circle cx="160" cy="112" r="48" fill="#c6ff4d" opacity=".14"/>
-        <path d="M152 86 Q138 62 148 52 Q158 70 158 84 Z" fill="#4cd964"/>
-        <path d="M159 84 Q158 50 170 44 Q173 66 166 86 Z" fill="#3ec257"/>
-        <path d="M167 88 Q186 62 197 66 Q187 81 174 92 Z" fill="#4cd964"/>
-        <path d="M137 92 Q160 79 183 92 L164 160 Q160 168 156 160 Z" fill="#ff8c1a"/>
-        <path d="M151 147 L158 147 M165 139 L172 139 M147 122 L152 122" stroke="#d96e00" stroke-width="2.5" stroke-linecap="round"/>
-        <circle cx="149" cy="104" r="7" fill="#fff"/><circle cx="151" cy="105" r="3.2" fill="#1b1b2f"/>
-        <circle cx="171" cy="102" r="9" fill="#fff"/><circle cx="169" cy="104" r="4" fill="#1b1b2f"/>
-        <circle cx="160" cy="120" r="4.5" fill="#fff"/><circle cx="161" cy="121" r="2" fill="#1b1b2f"/>
-        <path d="M148 131 Q160 141 173 129" stroke="#6b2d00" stroke-width="3" fill="none" stroke-linecap="round"/>
-      </svg>
-    </div>
-    <div class="info">
-      <h2>Mutant Farm</h2>
-      <p>Grow strange crops on a very, very weird farm.</p>
-      <span class="play">Play ▶</span>
-    </div>
-  </a>
+        <a class="card" href="https://taaha-ilyas.github.io/dwarvendream/" style="--accent:#4de8e0">
+          <div class="thumb">
+            <svg viewBox="0 0 320 180" role="img" aria-label="A dwarf miner in a crystal cave"><use href="#art-dwarven"/></svg>
+            <span class="badge">NEW</span>
+            <h3>Dwarven Dream</h3>
+            <span class="play-circle" aria-hidden="true">▶</span>
+          </div>
+          <div class="card-info"><span class="tag">Mining</span>Mine ore veins, unlock deeper areas and get rich.</div>
+        </a>
 
-  <!-- FISHING RISE -->
-  <a class="card" href="https://taaha-ilyas.github.io/fishingrise/" style="--accent:#ffb35c">
-    <div class="art">
-      <svg viewBox="0 0 320 180" role="img" aria-label="A fishing boat at sunrise with kraken tentacles rising from the sea">
-        <defs>
-          <linearGradient id="frSky" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#ff8a5a"/><stop offset="1" stop-color="#ffe0a3"/>
-          </linearGradient>
-          <linearGradient id="frSea" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#1f6f9c"/><stop offset="1" stop-color="#0a2a44"/>
-          </linearGradient>
-        </defs>
-        <rect width="320" height="100" fill="url(#frSky)"/>
-        <circle cx="160" cy="100" r="34" fill="#fff1b8"/>
-        <rect y="100" width="320" height="80" fill="url(#frSea)"/>
-        <g fill="#fff1b8" opacity=".55">
-          <rect x="135" y="107" width="50" height="3" rx="1.5"/><rect x="143" y="115" width="34" height="3" rx="1.5"/><rect x="150" y="123" width="20" height="3" rx="1.5"/>
-        </g>
-        <path d="M0 140 Q20 134 40 140 T80 140 T120 140 T160 140 T200 140 T240 140 T280 140 T320 140" stroke="#7fc6e8" stroke-width="2" fill="none" opacity=".5"/>
-        <path d="M0 160 Q20 154 40 160 T80 160 T120 160 T160 160 T200 160 T240 160 T280 160 T320 160" stroke="#7fc6e8" stroke-width="2" fill="none" opacity=".35"/>
-        <line x1="74" y1="97" x2="74" y2="58" stroke="#4a2a14" stroke-width="3"/>
-        <polygon points="77,61 77,92 102,92" fill="#f4ecd8"/>
-        <path d="M38 96 L110 96 L99 111 L49 111 Z" fill="#6b3d1f"/>
-        <line x1="100" y1="94" x2="128" y2="68" stroke="#3a2a1a" stroke-width="2"/>
-        <line x1="128" y1="68" x2="134" y2="122" stroke="#fff" stroke-width="1" opacity=".85"/>
-        <circle cx="134" cy="120" r="3.5" fill="#e63946"/>
-        <g fill="none" stroke-linecap="round">
-          <path d="M218 182 C214 162 230 152 224 136" stroke="#8e44ad" stroke-width="9"/>
-          <path d="M252 182 C240 150 276 140 268 112 C262 90 284 82 291 97" stroke="#8e44ad" stroke-width="14"/>
-          <path d="M252 182 C240 150 276 140 268 112 C262 90 284 82 291 97" stroke="#d6a6ea" stroke-width="4" stroke-dasharray="1 9"/>
-          <path d="M302 182 C307 152 286 140 297 121 C305 106 318 108 316 120" stroke="#9b59b6" stroke-width="10"/>
-          <path d="M302 182 C307 152 286 140 297 121 C305 106 318 108 316 120" stroke="#d6a6ea" stroke-width="3" stroke-dasharray="1 8"/>
-        </g>
-      </svg>
-    </div>
-    <div class="info">
-      <h2>Fishing Rise</h2>
-      <p>Start as a poor fishing village and rise up to take on the Kraken.</p>
-      <span class="play">Play ▶</span>
-    </div>
-  </a>
+        <a class="card" href="https://taaha-ilyas.github.io/emberhold/" style="--accent:#ff8a3d">
+          <div class="thumb">
+            <svg viewBox="0 0 320 180" role="img" aria-label="A glowing sword in a fiery landscape"><use href="#art-emberhold"/></svg>
+            <h3>Emberhold</h3>
+            <span class="play-circle" aria-hidden="true">▶</span>
+          </div>
+          <div class="card-info"><span class="tag">RPG</span>Train your hero, grab your sword and battle through the land.</div>
+        </a>
 
-  <!-- LUDO -->
-  <a class="card" href="https://taaha-ilyas.github.io/ludo/" style="--accent:#fdd835">
-    <div class="art">
-      <svg viewBox="0 0 320 180" role="img" aria-label="A Ludo board with coloured pawns and a dice">
-        <defs>
-          <pattern id="ldGrid" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="translate(85 15)">
-            <rect width="10" height="10" fill="none" stroke="#9aa3ad" stroke-width=".8"/>
-          </pattern>
-        </defs>
-        <rect width="320" height="180" fill="#2e7d5b"/>
-        <rect x="85" y="15" width="150" height="150" fill="#fff"/>
-        <rect x="155" y="25" width="10" height="50" fill="#43a047"/>
-        <rect x="95" y="85" width="50" height="10" fill="#e53935"/>
-        <rect x="175" y="85" width="50" height="10" fill="#fdd835"/>
-        <rect x="155" y="105" width="10" height="50" fill="#1e88e5"/>
-        <g fill="url(#ldGrid)">
-          <rect x="145" y="15" width="30" height="60"/><rect x="145" y="105" width="30" height="60"/>
-          <rect x="85" y="75" width="60" height="30"/><rect x="175" y="75" width="60" height="30"/>
-        </g>
-        <rect x="85" y="15" width="60" height="60" fill="#e53935"/>
-        <rect x="175" y="15" width="60" height="60" fill="#43a047"/>
-        <rect x="85" y="105" width="60" height="60" fill="#1e88e5"/>
-        <rect x="175" y="105" width="60" height="60" fill="#fdd835"/>
-        <g fill="#fff"><rect x="97" y="27" width="36" height="36" rx="4"/><rect x="187" y="27" width="36" height="36" rx="4"/><rect x="97" y="117" width="36" height="36" rx="4"/><rect x="187" y="117" width="36" height="36" rx="4"/></g>
-        <g stroke="#222" stroke-width="1.2">
-          <g fill="#e53935"><circle cx="106" cy="36" r="5"/><circle cx="124" cy="36" r="5"/><circle cx="106" cy="54" r="5"/><circle cx="124" cy="54" r="5"/></g>
-          <g fill="#43a047"><circle cx="196" cy="36" r="5"/><circle cx="214" cy="36" r="5"/><circle cx="196" cy="54" r="5"/><circle cx="214" cy="54" r="5"/></g>
-          <g fill="#1e88e5"><circle cx="106" cy="126" r="5"/><circle cx="124" cy="126" r="5"/><circle cx="106" cy="144" r="5"/><circle cx="124" cy="144" r="5"/></g>
-          <g fill="#fdd835"><circle cx="196" cy="126" r="5"/><circle cx="214" cy="126" r="5"/><circle cx="196" cy="144" r="5"/><circle cx="214" cy="144" r="5"/></g>
-        </g>
-        <polygon points="145,75 145,105 160,90" fill="#e53935"/>
-        <polygon points="145,75 175,75 160,90" fill="#43a047"/>
-        <polygon points="175,75 175,105 160,90" fill="#fdd835"/>
-        <polygon points="145,105 175,105 160,90" fill="#1e88e5"/>
-        <rect x="85" y="15" width="150" height="150" fill="none" stroke="#1b1b1b" stroke-width="2.5" rx="2"/>
-        <g fill="#fdd835" stroke="#8a6d00" stroke-width="2">
-          <path d="M33 140 Q45 98 57 140 Z"/><circle cx="45" cy="95" r="11"/><rect x="29" y="138" width="32" height="9" rx="3"/>
-        </g>
-        <g transform="translate(274 120) rotate(12)">
-          <rect x="-19" y="-19" width="38" height="38" rx="7" fill="#fff" stroke="#222" stroke-width="2"/>
-          <g fill="#222"><circle cx="-9" cy="-9" r="3.3"/><circle cx="9" cy="-9" r="3.3"/><circle cx="0" cy="0" r="3.3"/><circle cx="-9" cy="9" r="3.3"/><circle cx="9" cy="9" r="3.3"/></g>
-        </g>
-      </svg>
-    </div>
-    <div class="info">
-      <h2>Ludo</h2>
-      <p>Race all your pieces home before your friends do.</p>
-      <span class="play">Play ▶</span>
-    </div>
-  </a>
+        <a class="card" href="https://taaha-ilyas.github.io/fishingrise/" style="--accent:#ffb35c">
+          <div class="thumb">
+            <svg viewBox="0 0 320 180" role="img" aria-label="A fishing boat with Kraken tentacles rising from the sea"><use href="#art-fishing"/></svg>
+            <h3>Fishing Rise</h3>
+            <span class="play-circle" aria-hidden="true">▶</span>
+          </div>
+          <div class="card-info"><span class="tag">Fishing</span>Grow a poor fishing village and take on the Kraken.</div>
+        </a>
 
-  <!-- BATTLESHIPS -->
-  <a class="card" href="https://taaha-ilyas.github.io/battleships/" style="--accent:#5ab4ff">
-    <div class="art">
-      <svg viewBox="0 0 320 180" role="img" aria-label="A battleship on a targeting grid taking a hit">
-        <defs>
-          <linearGradient id="bsSea" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stop-color="#1565a0"/><stop offset="1" stop-color="#0b2e52"/>
-          </linearGradient>
-          <pattern id="bsGrid" width="20" height="20" patternUnits="userSpaceOnUse">
-            <rect width="20" height="20" fill="none" stroke="#ffffff" stroke-opacity=".14" stroke-width="1"/>
-          </pattern>
-          <polygon id="bsBoom" points="228,108 217.4,111.1 222.7,120.7 213.1,115.4 210,126 206.9,115.4 197.3,120.7 202.6,111.1 192,108 202.6,104.9 197.3,95.3 206.9,100.6 210,90 213.1,100.6 222.7,95.3 217.4,104.9"/>
-        </defs>
-        <rect width="320" height="180" fill="url(#bsSea)"/>
-        <rect width="320" height="180" fill="url(#bsGrid)"/>
-        <line x1="156" y1="64" x2="156" y2="44" stroke="#5f6b78" stroke-width="2.5"/>
-        <rect x="145" y="64" width="22" height="18" fill="#9aa7b4"/>
-        <rect x="128" y="80" width="54" height="28" fill="#8a98a6"/>
-        <rect x="188" y="86" width="14" height="22" fill="#6c7885"/>
-        <line x1="92" y1="102" x2="62" y2="96" stroke="#5f6b78" stroke-width="4" stroke-linecap="round"/>
-        <rect x="86" y="97" width="24" height="12" rx="4" fill="#8a98a6"/>
-        <line x1="222" y1="102" x2="252" y2="96" stroke="#5f6b78" stroke-width="4" stroke-linecap="round"/>
-        <rect x="208" y="97" width="24" height="12" rx="4" fill="#8a98a6"/>
-        <path d="M48 108 L272 108 L254 134 L66 134 Z" fill="#7d8b99"/>
-        <rect x="66" y="128" width="188" height="6" fill="#b23a3a"/>
-        <use href="#bsBoom" fill="#ff9f1c"/>
-        <use href="#bsBoom" fill="#ffe066" transform="translate(210 108) scale(.5) translate(-210 -108)"/>
-        <g fill="#e63946" stroke="#fff" stroke-width="1.5"><circle cx="170" cy="120" r="5"/><circle cx="130" cy="120" r="5"/></g>
-        <g fill="#fff" opacity=".9"><circle cx="30" cy="30" r="4.5"/><circle cx="270" cy="50" r="4.5"/><circle cx="250" cy="150" r="4.5"/><circle cx="50" cy="150" r="4.5"/><circle cx="190" cy="30" r="4.5"/></g>
-        <g stroke="#ff4d4d" stroke-width="2.5" fill="none">
-          <circle cx="90" cy="50" r="14"/>
-          <path d="M90 30 V42 M90 58 V70 M70 50 H82 M98 50 H110"/>
-        </g>
-      </svg>
-    </div>
-    <div class="info">
-      <h2>Battleships</h2>
-      <p>Hide your fleet and hunt down your friend's ships.</p>
-      <span class="play">Play ▶</span>
-    </div>
-  </a>
+        <a class="card" href="https://taaha-ilyas.github.io/MutantFarm/" style="--accent:#9be35a">
+          <div class="thumb">
+            <svg viewBox="0 0 320 180" role="img" aria-label="A three-eyed mutant carrot on a farm"><use href="#art-mutant"/></svg>
+            <h3>Mutant Farm</h3>
+            <span class="play-circle" aria-hidden="true">▶</span>
+          </div>
+          <div class="card-info"><span class="tag">Farming</span>Grow strange crops on a very, very weird farm.</div>
+        </a>
 
-  <!-- SUDOKU VS -->
-  <a class="card" href="https://taaha-ilyas.github.io/sudoku/" style="--accent:#fde047">
-    <div class="art">
-      <svg viewBox="0 0 320 180" role="img" aria-label="Two sudoku grids facing off, blue versus red">
-        <defs>
-          <g id="sdGrid">
-            <rect width="90" height="90" rx="6" fill="#fff" stroke="#111" stroke-width="3"/>
-            <path d="M30 0 V90 M60 0 V90 M0 30 H90 M0 60 H90" stroke="#111" stroke-width="1.5"/>
-          </g>
-        </defs>
-        <rect width="320" height="180" fill="#2563eb"/>
-        <polygon points="178,0 320,0 320,180 142,180" fill="#dc2626"/>
-        <use href="#sdGrid" x="26" y="45"/>
-        <use href="#sdGrid" x="204" y="45"/>
-        <rect x="57" y="76" width="28" height="28" fill="#dbeafe"/>
-        <rect x="265" y="106" width="28" height="28" fill="#fee2e2"/>
-        <g font-family="Fredoka, system-ui, sans-serif" font-weight="700" font-size="20" text-anchor="middle">
-          <g fill="#1d4ed8">
-            <text x="41" y="67">5</text><text x="101" y="67">8</text><text x="71" y="97">3</text><text x="41" y="127">1</text><text x="101" y="127">9</text>
-          </g>
-          <g fill="#b91c1c">
-            <text x="249" y="67">7</text><text x="219" y="97">4</text><text x="279" y="97">2</text><text x="249" y="127">6</text>
-          </g>
-        </g>
-        <circle cx="160" cy="90" r="27" fill="#111" stroke="#fde047" stroke-width="4"/>
-        <text x="160" y="99" font-family="Fredoka, system-ui, sans-serif" font-weight="700" font-size="24" fill="#fde047" text-anchor="middle">VS</text>
-        <g fill="#fde047">
-          <polygon points="160,14 154,36 161,36 156,52 168,28 161,28 166,14"/>
-          <polygon points="160,166 166,144 159,144 164,128 152,152 159,152 154,166"/>
-        </g>
-      </svg>
+      </div>
+      <button class="arrow right" aria-label="Scroll right" hidden>›</button>
     </div>
-    <div class="info">
-      <h2>Sudoku Vs</h2>
-      <p>Race your friends to fill the grid first.</p>
-      <span class="play">Play ▶</span>
-    </div>
-  </a>
+  </section>
 
-  <!-- MONOPOLY -->
-  <a class="card" href="https://taaha-ilyas.github.io/monopoly" style="--accent:#4fd18b">
-    <div class="art">
-      <svg viewBox="0 0 320 180" role="img" aria-label="Houses, a hotel and a pair of dice on a street">
-        <rect width="320" height="180" fill="#cfe8d5"/>
-        <g>
-          <rect x="0" y="0" width="40" height="16" fill="#8b4513"/><rect x="40" y="0" width="40" height="16" fill="#87ceeb"/>
-          <rect x="80" y="0" width="40" height="16" fill="#d63384"/><rect x="120" y="0" width="40" height="16" fill="#fd7e14"/>
-          <rect x="160" y="0" width="40" height="16" fill="#dc3545"/><rect x="200" y="0" width="40" height="16" fill="#ffc107"/>
-          <rect x="240" y="0" width="40" height="16" fill="#198754"/><rect x="280" y="0" width="40" height="16" fill="#0d47a1"/>
-          <path d="M40 0 V16 M80 0 V16 M120 0 V16 M160 0 V16 M200 0 V16 M240 0 V16 M280 0 V16 M0 16 H320" stroke="#1b1b1b" stroke-width="2"/>
-        </g>
-        <circle cx="270" cy="48" r="14" fill="#ffd54a" stroke="#c99700" stroke-width="3"/>
-        <text x="270" y="54" font-family="Fredoka, system-ui, sans-serif" font-weight="700" font-size="16" fill="#9a7300" text-anchor="middle">$</text>
-        <rect y="138" width="320" height="42" fill="#5b6770"/>
-        <g fill="#fff"><rect x="10" y="157" width="28" height="4" rx="2"/><rect x="70" y="157" width="28" height="4" rx="2"/><rect x="130" y="157" width="28" height="4" rx="2"/><rect x="190" y="157" width="28" height="4" rx="2"/><rect x="250" y="157" width="28" height="4" rx="2"/></g>
-        <g fill="#2e9e4f" stroke="#1d6b35" stroke-width="2" stroke-linejoin="round">
-          <polygon points="28,138 28,116 41,103 54,116 54,138"/>
-          <polygon points="62,138 62,116 75,103 88,116 88,138"/>
-          <polygon points="96,138 96,116 109,103 122,116 122,138"/>
-        </g>
-        <polygon points="126,92 158,70 190,92" fill="#a01818"/>
-        <rect x="130" y="90" width="56" height="48" fill="#d62828"/>
-        <g fill="#ffe8a3"><rect x="138" y="98" width="9" height="9"/><rect x="153.5" y="98" width="9" height="9"/><rect x="169" y="98" width="9" height="9"/><rect x="138" y="113" width="9" height="9"/><rect x="169" y="113" width="9" height="9"/></g>
-        <rect x="152" y="122" width="12" height="16" fill="#5a0d0d"/>
-        <g transform="translate(236 104) rotate(-12)">
-          <rect x="-17" y="-17" width="34" height="34" rx="6" fill="#fff" stroke="#222" stroke-width="2"/>
-          <g fill="#222"><circle cx="-8" cy="-8" r="3"/><circle cx="0" cy="0" r="3"/><circle cx="8" cy="8" r="3"/></g>
-        </g>
-        <g transform="translate(282 116) rotate(14)">
-          <rect x="-17" y="-17" width="34" height="34" rx="6" fill="#fff" stroke="#222" stroke-width="2"/>
-          <g fill="#222"><circle cx="-8" cy="-8" r="3"/><circle cx="-8" cy="0" r="3"/><circle cx="-8" cy="8" r="3"/><circle cx="8" cy="-8" r="3"/><circle cx="8" cy="0" r="3"/><circle cx="8" cy="8" r="3"/></g>
-        </g>
-      </svg>
+  <!-- ================= VS ================= -->
+  <section class="row" id="vs">
+    <div class="row-head">
+      <h2>Vs Games</h2>
+      <p>Make a room, invite your friends and battle it out online</p>
     </div>
-    <div class="info">
-      <h2>Monopoly</h2>
-      <p>Buy property, build hotels and bankrupt your friends.</p>
-      <span class="play">Play ▶</span>
+    <div class="row-wrap">
+      <button class="arrow left" aria-label="Scroll left" hidden>‹</button>
+      <div class="track">
+
+        <a class="card" href="https://taaha-ilyas.github.io/sudoku/" style="--accent:#fde047">
+          <div class="thumb">
+            <svg viewBox="0 0 320 180" role="img" aria-label="Two sudoku grids facing off"><use href="#art-sudoku"/></svg>
+            <h3>Sudoku Vs</h3>
+            <span class="play-circle" aria-hidden="true">▶</span>
+          </div>
+          <div class="card-info"><span class="tag">Puzzle race</span>Race your friends to fill the grid first.</div>
+        </a>
+
+        <a class="card" href="https://taaha-ilyas.github.io/battleships/" style="--accent:#5ab4ff">
+          <div class="thumb">
+            <svg viewBox="0 0 320 180" role="img" aria-label="A battleship on a targeting grid taking a hit"><use href="#art-battleships"/></svg>
+            <h3>Battleships</h3>
+            <span class="play-circle" aria-hidden="true">▶</span>
+          </div>
+          <div class="card-info"><span class="tag">Strategy</span>Hide your fleet and hunt down your friend's ships.</div>
+        </a>
+
+        <a class="card" href="https://taaha-ilyas.github.io/ludo/" style="--accent:#fdd835">
+          <div class="thumb">
+            <svg viewBox="0 0 320 180" role="img" aria-label="A Ludo board with pawns and a dice"><use href="#art-ludo"/></svg>
+            <h3>Ludo</h3>
+            <span class="play-circle" aria-hidden="true">▶</span>
+          </div>
+          <div class="card-info"><span class="tag">Board game</span>Race all your pieces home before your friends do.</div>
+        </a>
+
+        <a class="card" href="https://taaha-ilyas.github.io/monopoly" style="--accent:#4fd18b">
+          <div class="thumb">
+            <svg viewBox="0 0 320 180" role="img" aria-label="Houses, a hotel and dice on a street"><use href="#art-monopoly"/></svg>
+            <h3>Monopoly</h3>
+            <span class="play-circle" aria-hidden="true">▶</span>
+          </div>
+          <div class="card-info"><span class="tag">Board game</span>Buy property, build hotels and bankrupt your friends.</div>
+        </a>
+
+      </div>
+      <button class="arrow right" aria-label="Scroll right" hidden>›</button>
     </div>
-  </a>
+  </section>
 
 </main>
 
 <footer>Made by Taaha Ilyas</footer>
+
+<script>
+  // Top bar turns solid once you scroll past the top
+  const topbar = document.getElementById('topbar');
+  const onScroll = () => topbar.classList.toggle('solid', window.scrollY > 40);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Left/right arrows on each row (only shown when there's more to scroll)
+  document.querySelectorAll('.row-wrap').forEach(wrap => {
+    const track = wrap.querySelector('.track');
+    const left = wrap.querySelector('.arrow.left');
+    const right = wrap.querySelector('.arrow.right');
+    const update = () => {
+      const max = track.scrollWidth - track.clientWidth;
+      left.hidden = track.scrollLeft <= 4;
+      right.hidden = track.scrollLeft >= max - 4;
+    };
+    left.addEventListener('click', () => track.scrollBy({ left: -track.clientWidth * 0.8 }));
+    right.addEventListener('click', () => track.scrollBy({ left: track.clientWidth * 0.8 }));
+    track.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  });
+</script>
 
 </body>
 </html>
