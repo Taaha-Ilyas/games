@@ -228,7 +228,139 @@
     <g id="wdEmpty" fill="none" stroke="#3a3e58" stroke-width="1.5">
       <rect x="0" width="18" height="18" rx="3"/><rect x="21" width="18" height="18" rx="3"/><rect x="42" width="18" height="18" rx="3"/><rect x="63" width="18" height="18" rx="3"/><rect x="84" width="18" height="18" rx="3"/>
     </g>
+    <linearGradient id="tlSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7cc8f0"/><stop offset="1" stop-color="#e3f5cf"/>
+    </linearGradient>
+    <radialGradient id="tlGlow"><stop offset="0" stop-color="#ffd84a" stop-opacity=".75"/><stop offset="1" stop-color="#ffd84a" stop-opacity="0"/></radialGradient>
+    <linearGradient id="tcSky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#0d1833"/><stop offset="1" stop-color="#2c3d6b"/>
+    </linearGradient>
+    <radialGradient id="tcGlow"><stop offset="0" stop-color="#ffb347" stop-opacity=".6"/><stop offset="1" stop-color="#ffb347" stop-opacity="0"/></radialGradient>
+    <polygon id="tlPine" points="0,-40 14,-8 8,-8 20,16 -20,16 -8,-8 -14,-8"/>
   </defs>
+
+  <!-- TREASURE LOGS -->
+  <symbol id="art-treasure" viewBox="0 0 320 180">
+    <rect width="320" height="180" fill="url(#tlSky)"/>
+    <!-- forest behind -->
+    <g fill="#8ccf9a">
+      <use href="#tlPine" transform="translate(20 110)"/><use href="#tlPine" transform="translate(62 104) scale(1.2)"/>
+      <use href="#tlPine" transform="translate(104 112)"/><use href="#tlPine" transform="translate(150 106) scale(1.15)"/>
+      <use href="#tlPine" transform="translate(196 112)"/><use href="#tlPine" transform="translate(300 104) scale(1.2)"/>
+    </g>
+    <g fill="#3f8f5a">
+      <use href="#tlPine" transform="translate(0 124) scale(1.1)"/><use href="#tlPine" transform="translate(42 128)"/>
+      <use href="#tlPine" transform="translate(86 122) scale(1.15)"/><use href="#tlPine" transform="translate(128 128)"/>
+      <use href="#tlPine" transform="translate(190 126)"/>
+    </g>
+    <!-- ground -->
+    <path d="M0 138 Q80 132 160 138 T320 136 V180 H0Z" fill="#5cae4f"/>
+    <path d="M0 156 Q160 148 320 156 V180 H0Z" fill="#4a9441"/>
+    <!-- big tree being chopped -->
+    <rect x="236" y="24" width="28" height="118" fill="#7a4a24"/>
+    <path d="M243 40 V70 M256 50 V92 M246 120 V138 M257 112 V134" stroke="#5a3416" stroke-width="2.5" stroke-linecap="round"/>
+    <polygon points="236,104 249,111 236,118" fill="#f2d29b"/>
+    <g fill="#2f8f4a">
+      <circle cx="250" cy="22" r="32"/><circle cx="218" cy="34" r="20"/><circle cx="284" cy="36" r="22"/><circle cx="252" cy="-4" r="24"/>
+    </g>
+    <g fill="#45ad62"><circle cx="236" cy="14" r="12"/><circle cx="270" cy="20" r="10"/><circle cx="214" cy="30" r="8"/></g>
+    <!-- treasure chest -->
+    <circle cx="290" cy="128" r="26" fill="url(#tlGlow)"/>
+    <rect x="275" y="130" width="30" height="12" fill="#8b5a2b"/>
+    <path d="M275 130 Q275 120 290 120 Q305 120 305 130 Z" fill="#a86b35"/>
+    <g fill="#f2b632"><rect x="280" y="120" width="3" height="22"/><rect x="297" y="120" width="3" height="22"/><rect x="288" y="128" width="4" height="6" rx="1"/></g>
+    <g fill="#fff6c2"><circle cx="276" cy="112" r="1.6"/><circle cx="304" cy="110" r="1.4"/><circle cx="290" cy="104" r="1.8"/></g>
+    <!-- stump -->
+    <rect x="122" y="128" width="26" height="14" fill="#7a4a24"/>
+    <ellipse cx="135" cy="128" rx="13" ry="4.5" fill="#e8c28a"/>
+    <ellipse cx="135" cy="128" rx="7" ry="2.3" fill="none" stroke="#b07a3e" stroke-width="1"/>
+    <!-- pet dog -->
+    <path d="M163 132 Q156 124 160 119" stroke="#e08a3c" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <g fill="#e08a3c">
+      <rect x="166" y="134" width="3" height="8"/><rect x="176" y="134" width="3" height="8"/>
+      <ellipse cx="172" cy="133" rx="10" ry="6"/><circle cx="183" cy="126" r="6"/>
+      <polygon points="179,122 181,114 185,121"/><polygon points="184,121 188,115 189,123"/>
+    </g>
+    <circle cx="188" cy="128" r="2.6" fill="#f5d0a8"/><circle cx="190.2" cy="127" r="1.2" fill="#222"/><circle cx="185" cy="124.5" r="1" fill="#222"/>
+    <!-- lumberjack -->
+    <rect x="199" y="126" width="8" height="15" fill="#2c4a7a"/><rect x="211" y="126" width="8" height="15" fill="#2c4a7a"/>
+    <rect x="197" y="139" width="11" height="5" rx="2" fill="#5a3416"/><rect x="210" y="139" width="11" height="5" rx="2" fill="#5a3416"/>
+    <rect x="196" y="100" width="26" height="30" rx="6" fill="#d63a2f"/>
+    <path d="M203 100 V130 M214 100 V130 M196 110 H222 M196 121 H222" stroke="#7a1a14" stroke-width="2.5"/>
+    <circle cx="209" cy="90" r="10" fill="#f2c29b"/>
+    <path d="M200 91 Q201 103 210 106 Q218 103 219 91 Q214 96 209 95 Q204 96 200 91 Z" fill="#8a4a1f"/>
+    <circle cx="213.5" cy="88" r="1.4" fill="#1b1b2f"/>
+    <path d="M199 88 Q199 76 209 76 Q219 76 219 88 Z" fill="#2f6fd6"/>
+    <rect x="198" y="85" width="22" height="4" rx="2" fill="#1f4fa6"/>
+    <circle cx="209" cy="75" r="3" fill="#fff"/>
+    <!-- axe mid-chop -->
+    <line x1="216" y1="124" x2="236" y2="106" stroke="#7a4a24" stroke-width="4" stroke-linecap="round"/>
+    <polygon points="231,97 241,100 243,112 233,110" fill="#c4ced8" stroke="#5f6b78" stroke-width="1"/>
+    <path d="M218 104 Q224 110 226 115" stroke="#d63a2f" stroke-width="7" fill="none" stroke-linecap="round"/>
+    <circle cx="226" cy="115" r="3.5" fill="#f2c29b"/>
+    <!-- wood chips -->
+    <g fill="#e8c28a">
+      <rect x="226" y="96" width="4" height="2.5" transform="rotate(-25 228 97)"/>
+      <rect x="222" y="88" width="3.5" height="2" transform="rotate(20 224 89)"/>
+      <rect x="230" y="84" width="3" height="2" transform="rotate(-40 231 85)"/>
+    </g>
+  </symbol>
+
+  <!-- THE CAMP -->
+  <symbol id="art-camp" viewBox="0 0 320 180">
+    <rect width="320" height="180" fill="url(#tcSky)"/>
+    <circle cx="276" cy="30" r="14" fill="#f4f1d0"/>
+    <circle cx="282" cy="26" r="12" fill="#1a2a50"/>
+    <g fill="#fff" opacity=".8">
+      <circle cx="30" cy="20" r="1.3"/><circle cx="80" cy="40" r="1"/><circle cx="130" cy="16" r="1.4"/>
+      <circle cx="190" cy="34" r="1"/><circle cx="230" cy="14" r="1.2"/><circle cx="306" cy="60" r="1"/>
+    </g>
+    <path d="M0 116 Q60 90 120 110 T240 102 T320 112 V180 H0Z" fill="#1c2b38"/>
+    <rect y="140" width="320" height="40" fill="#2f4a2a"/>
+    <!-- campfire glow -->
+    <circle cx="160" cy="132" r="56" fill="url(#tcGlow)"/>
+    <!-- watchtower with archer -->
+    <g fill="#6b4423">
+      <rect x="70" y="66" width="5" height="76"/><rect x="91" y="66" width="5" height="76"/>
+      <path d="M72 80 L94 104 M94 80 L72 104 M72 104 L94 128 M94 104 L72 128" stroke="#5a3416" stroke-width="2.5"/>
+      <rect x="64" y="62" width="38" height="7"/>
+    </g>
+    <polygon points="62,48 83,32 104,48" fill="#a33b2a"/>
+    <path d="M66 48 V62 M100 48 V62" stroke="#6b4423" stroke-width="3"/>
+    <circle cx="83" cy="52" r="4" fill="#f2c29b"/>
+    <rect x="79" y="55" width="8" height="8" rx="2" fill="#3a7d44"/>
+    <path d="M89 50 Q95 56 89 63" stroke="#c48a4a" stroke-width="2" fill="none"/>
+    <!-- arrow in flight -->
+    <path d="M96 56 Q170 20 236 96" stroke="#fff" stroke-width="1.2" fill="none" stroke-dasharray="3 5" opacity=".45"/>
+    <g transform="translate(222 76) rotate(52)">
+      <line x1="-12" y1="0" x2="8" y2="0" stroke="#e8d3a8" stroke-width="2"/>
+      <polygon points="8,-3.5 15,0 8,3.5" fill="#c4ced8"/>
+      <polygon points="-12,0 -16,-4 -10,0 -16,4" fill="#ff5e5e"/>
+    </g>
+    <!-- tents -->
+    <polygon points="110,140 126,108 142,140" fill="#c46b3a"/>
+    <polygon points="122,140 126,124 130,140" fill="#4a2414"/>
+    <polygon points="178,140 194,108 210,140" fill="#3a7bc4"/>
+    <polygon points="190,140 194,124 198,140" fill="#16304f"/>
+    <!-- campfire -->
+    <path d="M150 142 L170 134 M150 134 L170 142" stroke="#6b4423" stroke-width="4" stroke-linecap="round"/>
+    <path d="M152 136 Q150 124 158 116 Q156 126 162 124 Q160 116 166 110 Q172 124 168 136 Z" fill="#ff7a2f"/>
+    <path d="M156 136 Q156 128 160 124 Q160 130 164 128 Q166 132 164 136 Z" fill="#ffd84a"/>
+    <!-- palisade -->
+    <g fill="#8b5a2b" stroke="#5a3416" stroke-width="1">
+      <polygon points="218,142 218,118 222,112 226,118 226,142"/><polygon points="227,142 227,114 231,108 235,114 235,142"/>
+      <polygon points="236,142 236,118 240,112 244,118 244,142"/>
+    </g>
+    <!-- slimes attacking -->
+    <path d="M250 142 Q250 128 260 128 Q270 128 270 142 Z" fill="#5fd068"/>
+    <circle cx="257" cy="135" r="1.8" fill="#ff3030"/><circle cx="264" cy="135" r="1.8" fill="#ff3030"/>
+    <!-- boss slime -->
+    <path d="M276 142 Q276 108 296 108 Q316 108 316 142 Z" fill="#3fae4a"/>
+    <polygon points="284,112 280,98 290,108" fill="#e8e8f0"/><polygon points="308,112 312,98 302,108" fill="#e8e8f0"/>
+    <path d="M286 122 L292 125 M306 122 L300 125" stroke="#1b1b1b" stroke-width="2" stroke-linecap="round"/>
+    <circle cx="291" cy="127" r="2.6" fill="#ff3030"/><circle cx="301" cy="127" r="2.6" fill="#ff3030"/>
+    <path d="M289 135 Q296 131 303 135" stroke="#1b1b1b" stroke-width="2" fill="none"/>
+  </symbol>
 
   <!-- LOADED -->
   <symbol id="art-loaded" viewBox="0 0 320 180">
@@ -641,15 +773,15 @@
 
 <!-- ================= FEATURED ================= -->
 <section class="hero" id="top">
-  <svg viewBox="0 0 320 180" preserveAspectRatio="xMaxYMin slice" role="img" aria-label="A chef at a street food stand with a giant loaded burger">
-    <use href="#art-loaded"/>
+  <svg viewBox="0 0 320 180" preserveAspectRatio="xMaxYMin slice" role="img" aria-label="A lumberjack chopping a big tree, with a pet dog and a glowing treasure chest">
+    <use href="#art-treasure"/>
   </svg>
   <div class="hero-content">
     <span class="badge">NEW GAME</span>
-    <h1>Loaded</h1>
-    <p>Start with a tiny street food stand, cook up orders for hungry customers and grow it into a proper restaurant.</p>
+    <h1>Treasure Logs</h1>
+    <p>Chop trees, craft better axes and chainsaws, earn permits for new stages, and go hunting with your pets.</p>
     <div class="hero-actions">
-      <a class="btn btn-primary" href="https://taaha-ilyas.github.io/loaded/">▶ Play</a>
+      <a class="btn btn-primary" href="https://taaha-ilyas.github.io/treasurelogs/">▶ Play</a>
       <a class="btn btn-secondary" href="#progression">More games</a>
     </div>
   </div>
@@ -667,10 +799,29 @@
       <button class="arrow left" aria-label="Scroll left" hidden>‹</button>
       <div class="track">
 
+        <a class="card" href="https://taaha-ilyas.github.io/treasurelogs/" style="--accent:#ffd84a">
+          <div class="thumb">
+            <svg viewBox="0 0 320 180" role="img" aria-label="A lumberjack chopping a tree next to a treasure chest"><use href="#art-treasure"/></svg>
+            <span class="badge">NEW</span>
+            <h3>Treasure Logs</h3>
+            <span class="play-circle" aria-hidden="true">▶</span>
+          </div>
+          <div class="card-info"><span class="tag">Lumberjack</span>Chop trees, craft better tools and unlock new stages.</div>
+        </a>
+
+        <a class="card" href="https://taaha-ilyas.github.io/thecamp/" style="--accent:#ffb347">
+          <div class="thumb">
+            <svg viewBox="0 0 320 180" role="img" aria-label="A camp with a watchtower and campfire defending against slimes"><use href="#art-camp"/></svg>
+            <span class="badge">NEW</span>
+            <h3>The Camp</h3>
+            <span class="play-circle" aria-hidden="true">▶</span>
+          </div>
+          <div class="card-info"><span class="tag">Tower defence</span>Defend your camp from waves of enemies and boss fights.</div>
+        </a>
+
         <a class="card" href="https://taaha-ilyas.github.io/loaded/" style="--accent:#ff7a59">
           <div class="thumb">
             <svg viewBox="0 0 320 180" role="img" aria-label="A chef at a street food stand with a giant burger"><use href="#art-loaded"/></svg>
-            <span class="badge">NEW</span>
             <h3>Loaded</h3>
             <span class="play-circle" aria-hidden="true">▶</span>
           </div>
@@ -731,7 +882,6 @@
         <a class="card" href="https://taaha-ilyas.github.io/tictactoe/" style="--accent:#3fe0ff">
           <div class="thumb">
             <svg viewBox="0 0 320 180" role="img" aria-label="A neon tic tac toe board with a winning line of Xs"><use href="#art-ttt"/></svg>
-            <span class="badge">NEW</span>
             <h3>Tic Tac Toe</h3>
             <span class="play-circle" aria-hidden="true">▶</span>
           </div>
@@ -741,11 +891,10 @@
         <a class="card" href="https://taaha-ilyas.github.io/wordle/" style="--accent:#4caf50">
           <div class="thumb">
             <svg viewBox="0 0 320 180" role="img" aria-label="Two word-guessing boards, with a crown over the one solved first"><use href="#art-wordle"/></svg>
-            <span class="badge">NEW</span>
             <h3>1v1 Wordle</h3>
             <span class="play-circle" aria-hidden="true">▶</span>
           </div>
-          <div class="card-info"><span class="tag">Word race</span>Same word, two players. Guess it in fewer rows to win.</div>
+          <div class="card-info"><span class="tag">Word race</span>Everyone gets the same word. Guess it in the fewest rows to win.</div>
         </a>
 
         <a class="card" href="https://taaha-ilyas.github.io/sudoku/" style="--accent:#fde047">
